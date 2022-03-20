@@ -22,23 +22,46 @@ function add(todo){
   let todoText = input.value;
 
   if (todo) {
-    todoText = todo;
+    todoText = todo.text;
   }
-  if (todoText.length > 0) { //空文字ではリストが作成されない
+  if (todoText) { //空文字ではリストが作成されない
      const li = document.createElement("li");
+
     li.innerText = todoText;
-    li.classList.add("list-group-item");
+    li.classList.add('list-group-item');
+
+    if (todo && todo.completed) {
+      li.classList.add("text-decoration-line-through");
+    }
+
+    li.addEventListener("contextmenu", function(event) { //右クリックでリストを削除
+      event.preventDefault();
+      li.remove();
+      saveDate();
+    });
+
+    li.addEventListener("click", function() { //クリックで打消し線
+      li.classList.toggle("text-decoration-line-through");
+      saveDate();
+    });
+
     ul.appendChild(li);
     input.value = "";
     saveDate();
   }
 }
 
-function saveDate(){
+function saveDate() {
   const lists = document.querySelectorAll("li");
   let todos = [];
-  lists.forEach(list => {
-    todos.push(list.innerText);
+  
+  lists.forEach((li) => {
+    todos.push({
+      text: li.innerText,
+      completed: li.classList.contains("text-decoration-line-through"),
+    });
   });
+
   localStorage.setItem("todos", JSON.stringify(todos));
+  
 }
