@@ -11,9 +11,12 @@ form.addEventListener("submit", function (event){
 
 // 入力内容のリストを追加
 function add(){
-  const li = document.createElement("list");
-  li.innerText = input.value;
-  li.classList.add("list-group-item");
-  ul.appendChild(li);
-  input.value = "";
+  let todoText = input.value;
+  if (todoText.length > 0) {
+     const li = document.createElement("li");
+    li.innerText = todoText;
+    li.classList.add("list-group-item");
+    ul.appendChild(li);
+    input.value = "";
+  }
 }
